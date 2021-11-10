@@ -1,0 +1,2 @@
+719b9753ef3a0cd1f3dcd5262103bee5c2618d664fec568e5c27f5507234bcb0  target/wasm32-unknown-unknown/release/alpha.wasm
+8493568828c89f5b934c66f4f2d80123f2de46c07de8a44675de3f822181e06b  target/wasm32-unknown-unknown/release/beta.wasm

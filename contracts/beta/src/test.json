@@ -1,0 +1,26 @@
+//{
+//  "chain": {
+//    "request": {
+//      "custom": {
+//        "ping": {
+//
+//        }
+//      }
+//    }
+//  }
+//}
+//
+
+//{
+//  "chain": {
+//    "request": {
+//      "custom": {
+//        "denom": {
+//            "denom_id": "testdenom"
+//        }
+//      }
+//    }
+//  }
+//}
+
+{"msgIssueDenom":{"id":"testdenom2","name":"TESTDENOM2", "schema":"", "sender":"cudos19pvzkaapcu37xv6dvwa36t65j73s39huvkkuqt"}}
