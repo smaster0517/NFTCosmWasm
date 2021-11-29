@@ -6,8 +6,8 @@ use cosmwasm_std::{
 
 use crate::errors::ReflectError;
 use crate::msg::{
-    CapitalizedResponse, ChainResponse, CustomMsg, ExecuteMsg, InstantiateMsg, OwnerResponse,
-    QueryMsg, RawResponse, SpecialQuery, SpecialResponse,
+    CapitalizedResponse, ChainResponse, CustomMsg, Denom, ExecuteMsg, InstantiateMsg,
+    OwnerResponse, QueryMsg, RawResponse, SpecialQuery, SpecialResponse,
 };
 use crate::state::{config, config_read, replies, replies_read, State};
 
@@ -30,31 +30,70 @@ pub fn execute(
 ) -> Result<Response<CustomMsg>, ReflectError> {
     match msg {
         ExecuteMsg::ReflectMsg { msgs } => try_reflect(deps, env, info, msgs),
-        ExecuteMsg::MsgIssueDenom { id, name, schema, sender } => try_issue_denom(deps, env, info, id, name, schema, sender),
+        ExecuteMsg::IssueDenomMsg {
+            id,
+            name,
+            schema,
+            sender,
+        } => try_issue_denom(deps, env, info, id, name, schema, sender),
         ExecuteMsg::ReflectSubMsg { msgs } => try_reflect_subcall(deps, env, info, msgs),
         ExecuteMsg::ChangeOwner { owner } => try_change_owner(deps, env, info, owner),
     }
 }
 
-pub fn try_issue_denom(
-    deps: DepsMut,
+pub fn try_issue_denom_second(
+    _deps: DepsMut,
     _env: Env,
-    info: MessageInfo,
+    _info: MessageInfo,
     id: String,
     name: String,
     schema: String,
-    sender: String
+    sender: String,
 ) -> Result<Response<CustomMsg>, ReflectError> {
-
-    let msg =  CustomMsg::IssueDenom {
+    let msg: CustomMsg = CustomMsg::IssueDenomSecond {
         id,
         name,
         schema,
-        sender
-    };
+        sender,
+    }
+    .into();
 
     Ok(Response::new()
         .add_attribute("action", "issueDenom")
+        .add_message(msg))
+}
+pub fn try_issue_denom(
+    _deps: DepsMut,
+    _env: Env,
+    _info: MessageInfo,
+    id: String,
+    name: String,
+    schema: String,
+    sender: String,
+) -> Result<Response<CustomMsg>, ReflectError> {
+    let msg: CustomMsg = CustomMsg::IssueDenom {
+        id,
+        name,
+        schema,
+        sender,
+    }
+    .into();
+
+    Ok(Response::new()
+        .add_attribute("action", "issueDenom")
+        .add_message(msg))
+}
+
+pub fn try_issue_debug(
+    _deps: DepsMut,
+    _env: Env,
+    _info: MessageInfo,
+    debug_msg: String,
+) -> Result<Response<CustomMsg>, ReflectError> {
+    let msg: CustomMsg = CustomMsg::Debug(debug_msg).into();
+
+    Ok(Response::new()
+        .add_attribute("action", "reflect")
         .add_message(msg))
 }
 
@@ -226,7 +265,7 @@ mod tests {
             to_address: String::from("friend"),
             amount: coins(1, "token"),
         }
-            .into()];
+        .into()];
 
         let msg = ExecuteMsg::ReflectMsg {
             msgs: payload.clone(),
@@ -250,7 +289,7 @@ mod tests {
             to_address: String::from("friend"),
             amount: coins(1, "token"),
         }
-            .into()];
+        .into()];
         let msg = ExecuteMsg::ReflectMsg { msgs: payload };
 
         let info = mock_info("random", &[]);
@@ -290,7 +329,7 @@ mod tests {
                 to_address: String::from("friend"),
                 amount: coins(1, "token"),
             }
-                .into(),
+            .into(),
             // make sure we can pass through custom native messages
             CustomMsg::Raw(Binary(b"{\"foo\":123}".to_vec())).into(),
             CustomMsg::Debug("Hi, Dad!".to_string()).into(),
@@ -298,7 +337,7 @@ mod tests {
                 validator: String::from("validator"),
                 amount: coin(100, "ustake"),
             }
-                .into(),
+            .into(),
         ];
 
         let msg = ExecuteMsg::ReflectMsg {
@@ -396,7 +435,7 @@ mod tests {
             request: BankQuery::AllBalances {
                 address: MOCK_CONTRACT_ADDR.to_string(),
             }
-                .into(),
+            .into(),
         };
         let response = query(deps.as_ref(), mock_env(), msg).unwrap();
         let outer: ChainResponse = from_binary(&response).unwrap();

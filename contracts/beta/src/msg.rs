@@ -9,15 +9,21 @@ pub struct InstantiateMsg {}
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum ExecuteMsg {
-    ReflectMsg { msgs: Vec<CosmosMsg<CustomMsg>> },
-    MsgIssueDenom {
+    ReflectMsg {
+        msgs: Vec<CosmosMsg<CustomMsg>>,
+    },
+    IssueDenomMsg {
         id: String,
         name: String,
         schema: String,
         sender: String,
     },
-    ReflectSubMsg { msgs: Vec<SubMsg<CustomMsg>> },
-    ChangeOwner { owner: String },
+    ReflectSubMsg {
+        msgs: Vec<SubMsg<CustomMsg>>,
+    },
+    ChangeOwner {
+        owner: String,
+    },
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -81,7 +87,13 @@ pub enum CustomMsg {
         id: String,
         name: String,
         schema: String,
-        sender: String
+        sender: String,
+    },
+    IssueDenomSecond {
+        id: String,
+        name: String,
+        schema: String,
+        sender: String,
     },
 }
 
@@ -90,7 +102,6 @@ impl From<CustomMsg> for CosmosMsg<CustomMsg> {
         CosmosMsg::Custom(original)
     }
 }
-
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
@@ -108,4 +119,14 @@ impl CustomQuery for SpecialQuery {}
 /// The response data for all `SpecialQuery`s
 pub struct SpecialResponse {
     pub msg: String,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+/// The denom structure
+pub struct Denom {
+    pub id: String,
+    pub name: String,
+    pub schema: String,
+    pub sender: String,
 }
