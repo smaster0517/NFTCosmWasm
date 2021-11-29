@@ -47,6 +47,14 @@ pub enum QueryMsg {
     SubMsgResult {
         id: u64,
     },
+    /// If there was a previous ReflectSubMsg with this ID, returns cosmwasm_std::Reply
+    QueryDenomById {
+        denom_id: String,
+    },
+    /// If there was a previous ReflectSubMsg with this ID, returns cosmwasm_std::Reply
+    QueryDenomByIdTest {
+        denom_id: String,
+    },
 }
 
 // We define a custom struct for each query response
@@ -109,7 +117,8 @@ impl From<CustomMsg> for CosmosMsg<CustomMsg> {
 pub enum SpecialQuery {
     Ping {},
     Capitalized { text: String },
-    Denom { denom_id: String },
+    QueryDenomById { denom_id: String },
+    QueryDenomByIdTest { denom_id: String },
 }
 
 impl CustomQuery for SpecialQuery {}
@@ -128,5 +137,20 @@ pub struct Denom {
     pub id: String,
     pub name: String,
     pub schema: String,
-    pub sender: String,
+    pub creator: String,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub struct QueryDenomResponse {
+    pub denom: Denom,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub struct QueryDenomResponseTest {
+    pub id: String,
+    pub name: String,
+    pub schema: String,
+    pub creator: String,
 }

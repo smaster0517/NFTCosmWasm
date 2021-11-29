@@ -9,11 +9,16 @@
 //     }
 // }
 //{
+// {
+//     "issue_denom_msg_second": {
+//         "id": "testdenom2",
+//         "name": "TESTDENOM2",
+//         "schema": "",
+//         "sender": "cudos19pvzkaapcu37xv6dvwa36t65j73s39huvkkuqt"
+//     }
+// }
 {
-    "issue_denom_msg_second": {
-        "id": "testdenom2",
-        "name": "TESTDENOM2",
-        "schema": "",
-        "sender": "cudos19pvzkaapcu37xv6dvwa36t65j73s39huvkkuqt"
+    "query_denom_by_id": {
+        "denom_id": "testdenom2"
     }
 }

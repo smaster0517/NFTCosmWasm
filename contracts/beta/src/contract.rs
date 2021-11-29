@@ -7,7 +7,8 @@ use cosmwasm_std::{
 use crate::errors::ReflectError;
 use crate::msg::{
     CapitalizedResponse, ChainResponse, CustomMsg, Denom, ExecuteMsg, InstantiateMsg,
-    OwnerResponse, QueryMsg, RawResponse, SpecialQuery, SpecialResponse,
+    OwnerResponse, QueryDenomResponse, QueryDenomResponseTest, QueryMsg, RawResponse, SpecialQuery,
+    SpecialResponse,
 };
 use crate::state::{config, config_read, replies, replies_read, State};
 
@@ -181,7 +182,21 @@ pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<QueryResponse> {
         QueryMsg::Chain { request } => to_binary(&query_chain(deps, &request)?),
         QueryMsg::Raw { contract, key } => to_binary(&query_raw(deps, contract, key)?),
         QueryMsg::SubMsgResult { id } => to_binary(&query_subcall(deps, id)?),
+        QueryMsg::QueryDenomById { denom_id } => to_binary(&query_denom(deps, denom_id)?),
+        QueryMsg::QueryDenomByIdTest { denom_id } => to_binary(&query_denom_test(deps, denom_id)?),
     }
+}
+
+fn query_denom(deps: Deps, denom_id: String) -> StdResult<QueryDenomResponse> {
+    let req = SpecialQuery::QueryDenomById { denom_id }.into();
+    let response: QueryDenomResponse = deps.querier.custom_query(&req)?;
+    Ok(response)
+}
+
+fn query_denom_test(deps: Deps, denom_id: String) -> StdResult<QueryDenomResponseTest> {
+    let req = SpecialQuery::QueryDenomByIdTest { denom_id }.into();
+    let response: QueryDenomResponseTest = deps.querier.custom_query(&req)?;
+    Ok(response)
 }
 
 fn query_owner(deps: Deps) -> StdResult<OwnerResponse> {

@@ -1,2 +1,2 @@
 719b9753ef3a0cd1f3dcd5262103bee5c2618d664fec568e5c27f5507234bcb0  target/wasm32-unknown-unknown/release/alpha.wasm
-ea00d284d6f8bbe33084bbee64e60796f042cd74f26e6d0f7ecf02ee91556369  target/wasm32-unknown-unknown/release/beta.wasm
+632139e89a2012219122cc9f70385b40f216e7af07cc1a4d90ec32d8a0bd6c78  target/wasm32-unknown-unknown/release/beta.wasm
