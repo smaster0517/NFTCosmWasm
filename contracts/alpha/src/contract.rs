@@ -7,7 +7,6 @@ use crate::query::{DenomResponse};
 use crate::querier::CudosQuerier;
 use crate::state::{State, STATE};
 
-// !! Part of the code is borrowed from https://github.com/terra-money/terra-cosmwasm
 // just for testing purposes !!
 
 // Note, you can use StdResult in some functions where you do not
@@ -68,7 +67,6 @@ pub fn execute_msg_issue_denom(
 
     Ok(Response::new().add_message(msg))
 }
-
 
 pub fn try_reset(deps: DepsMut, info: MessageInfo, count: i32) -> Result<Response, ContractError> {
     STATE.update(deps.storage, |mut state| -> Result<_, ContractError> {
